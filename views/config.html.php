@@ -10,22 +10,18 @@
 </head>
 
 <body>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>    <script type="text/javascript" charset="utf-8">
-        $(document).ready(
-            function(){
-                $("dl.api-properties").hide();
-                $(".API>h2").click(function(){  $("dl.api-properties", $(this).parent()).toggle("slow");   }).css({"cursor":"pointer"});
-		$("dl.endpoint-properties").hide();
-                $("h3").click(function(){  $("dl.endpoint-properties", $(this).parent()).toggle("slow");   }).css({"cursor":"pointer"});		
-		
-            }
-        );
-    </script>
-    <div class="container">
-    <div class="header">OpenPHACTS Linked Data Cache</div>
+<nav  class="ui black menu inverted navbar page grid">
+				<div class="ui item brand">
+					<a href="/"><img  src="http://risis.eu/wp-content/uploads/2014/08/RISIS-Logo-invert-small.jpg" alt="{{appShortTitle}}" /></a>
+				</div>
+<div class="ui item header">
+Linked Data Cache
+</div>
+</nav>
+    <div class="ui page grid">
     <div class="contents">
-        <h1>Linked Data API Configuration APIs:</h1>
-	<div class="API">
+        <h1 class="ui header">Linked Data API Configuration APIs:</h1>
+	<div class="API ui segment secondary">
                 <h2>Default variables</h2>
                 <p>Variables that can be supplied by HTTP GET/POST to all endpoints</p>
  	        <dl class="api-properties">
@@ -35,7 +31,7 @@
 	</div>
 
         <?php foreach ($ConfigGraph->get_subjects_of_type(API.'API') as $apiUri): ?>
-            <div class="API">
+            <div class="API ui segment secondary">
                 <?php $ConfigGraph->resetApiAndEndpoint($apiUri) ?>
                 <h2><?php echo $ConfigGraph->get_label($apiUri) ?> <em class="type">API</em></h2>
                 <p><?php echo $ConfigGraph->get_first_literal($apiUri, API.'description') ?></p>
@@ -139,8 +135,20 @@
 </div>   --> 
 
     </div>
-    <?php include 'footer.html' ?>
+
     </div>
-    
+
+<?php include 'footer.html' ?>    
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>    <script type="text/javascript" charset="utf-8">
+        $(document).ready(
+            function(){
+                $("dl.api-properties").hide();
+                $(".API>h2").click(function(){  $("dl.api-properties", $(this).parent()).toggle("slow");   }).css({"cursor":"pointer"});
+                $("dl.endpoint-properties").hide();
+                $("h3").click(function(){  $("dl.endpoint-properties", $(this).parent()).toggle("slow");   }).css({"cursor":"pointer"});                
+                
+            }
+        );
+    </script>
 </body>
 </html>

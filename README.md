@@ -1,7 +1,7 @@
-OPS_LinkedDataApi
+RISIS_LinkedDataAPI
 =================
 
-A repository to host API configuration files, and code extensions
+A repository to host API configuration files, and code extensions for the RISIS Project (http://risis.eu)
 
 Requirements are php 5.2, with php_xsl, lib_curl, and mod_rewrite and htaccess override enabled.
 

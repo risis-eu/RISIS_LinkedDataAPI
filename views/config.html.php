@@ -21,7 +21,7 @@ Linked Data Cache
     <div class="ui page grid">
     <div class="contents">
         <h1 class="ui header">Linked Data API Configuration APIs:</h1>
-	<div class="API ui segment secondary">
+	<div class="API ui orange piled segment">
                 <h2>Default variables</h2>
                 <p>Variables that can be supplied by HTTP GET/POST to all endpoints</p>
  	        <dl class="api-properties">
@@ -31,7 +31,7 @@ Linked Data Cache
 	</div>
 
         <?php foreach ($ConfigGraph->get_subjects_of_type(API.'API') as $apiUri): ?>
-            <div class="API ui segment secondary">
+            <div class="API ui red segment secondary">
                 <?php $ConfigGraph->resetApiAndEndpoint($apiUri) ?>
                 <h2><?php echo $ConfigGraph->get_label($apiUri) ?> <em class="type">API</em></h2>
                 <p><?php echo $ConfigGraph->get_first_literal($apiUri, API.'description') ?></p>

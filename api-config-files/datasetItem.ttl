@@ -11,13 +11,13 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
 <#metadata> a api:API ;
-        rdfs:label "The first RISIS API call"@en ;
+        rdfs:label "Datasets"@en ;
         api:sparqlEndpoint <http://localhost:8890/sparql/> ;
         api:contentNegotiation api:parameterBased ;
         api:variable <#input> ; 
 #	api:dataset <http://www.conceptwiki.org> ;
 #	api:vocabulary <http://semanticscience.org/resource/> ;
-	api:description "An API configuration to return information about dataset metadata" ;
+	api:description "An API configuration to return information about datasets metadata" ;
 	api:endpoint [ 
 		a api:ItemEndpoint ;
 		api:name "Dataset Information" ;

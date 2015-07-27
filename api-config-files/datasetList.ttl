@@ -11,7 +11,7 @@
 @prefix rel: <http://vocab.org/relationship/> .
 @prefix void: <http://rdfs.org/ns/void#> .
 <#metadata> a api:API ;
-        rdfs:label "Datasets"@en ;
+        rdfs:label "Datasets Metadata"@en ;
         api:sparqlEndpoint <http://localhost:8890/sparql/> ;
 	api:contentNegotiation api:parameterBased ;
 	api:description "An API configuration to return information about datasets metadata" ;

@@ -11,7 +11,7 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
 <#metadata> a api:API ;
-        rdfs:label "Datasets"@en ;
+        rdfs:label "Datasets Metadata"@en ;
         api:sparqlEndpoint <http://localhost:8890/sparql/> ;
         api:contentNegotiation api:parameterBased ;
         api:variable <#input> ; 

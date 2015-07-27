@@ -1,0 +1,47 @@
+@base <http://api.risis.ops.few.vu.nl/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix api: <http://purl.org/linked-data/api/vocab#> .
+@prefix gc: <http://puelia-php.googlecode.com/svn/trunk/documents/config.ttl#> .
+@prefix rel: <http://vocab.org/relationship/> .
+@prefix void: <http://rdfs.org/ns/void#> .
+<#metadata> a api:API ;
+        rdfs:label "The first RISIS API call"@en ;
+        api:sparqlEndpoint <http://localhost:8890/sparql/> ;
+	api:contentNegotiation api:parameterBased ;
+	api:description "An API configuration to return information about dataset metadata" ;
+	api:endpoint <#datasetListEndpoint> .
+
+<#datasetListEndpoint> a api:ListEndpoint ;
+	api:uriTemplate "/datasets" ;
+	api:name "Datasets List" ;
+	api:description "A paginated list of datasets available" ;	
+	api:exampleRequestPath "/datasets" ;
+	api:defaultPageSize "10";	
+	api:selector [
+		api:where 
+"
+?item a void:Dataset .
+" ; 
+	] ;
+	api:defaultViewer <#datasetListViewer> .
+
+<#datasetListViewer> a api:Viewer ;
+        api:name "datasetListViewer" ;
+	api:template 
+"
+        ?item dcterms:title ?title ;
+                dcterms:description ?desc .
+" ;
+	api:where 
+"
+GRAPH ?g {
+        ?item dcterms:title ?title ;
+                dcterms:description ?desc .
+}
+"

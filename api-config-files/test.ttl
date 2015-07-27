@@ -1,0 +1,55 @@
+@base <http://api.risis.ops.few.vu.nl/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix api: <http://purl.org/linked-data/api/vocab#> .
+@prefix rel: <http://vocab.org/relationship/> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<#metadata> a api:API ;
+        rdfs:label "The first RISIS API call"@en ;
+        api:sparqlEndpoint <http://localhost:8890/sparql/> ;
+        api:contentNegotiation api:parameterBased ;
+        api:variable <#input> ; 
+#	api:dataset <http://www.conceptwiki.org> ;
+#	api:vocabulary <http://semanticscience.org/resource/> ;
+	api:description "An API configuration to return information about dataset metadata" ;
+	api:endpoint [ 
+		a api:ItemEndpoint ;
+		api:name "Dataset Information" ;
+		api:description "Information about a single dataset.";
+		api:uriTemplate "/dataset?uri={uri}" ;
+	        api:itemTemplate "{uri}" ;
+		api:exampleRequestPath "/dataset?uri=http%3A%2F%2Frdf.risis.eu%2Fdataset%2Fexample%2F1.0%2Fvoid.ttl%23example_rdf_dataset";
+		api:viewer <#datasetViewer> ;
+		api:defaultViewer <#datasetViewer> ] .
+
+#<http://www.conceptwiki.org> api:label "ConceptWiki" .
+
+#<http://semanticscience.org/resource/> api:label "sio" .
+
+<#input> api:name "uri" ;
+	api:label "uri";
+	api:value "A dataset URI. e.g.: http://rdf.risis.eu/dataset/example/1.0/void.ttl#example_rdf_dataset" ;
+        rdfs:range rdf:Resource .
+ 
+
+<#datasetViewer> a api:Viewer ;
+	api:name "datasetViewer" ;
+	api:template 
+"
+?dataset_uri ?p ?o.
+?temp ?p_t ?o_t
+";
+	api:where 
+"
+GRAPH ?g {
+	?dataset_uri ?p ?o ;
+		dcterms:temporal ?temp .
+	?temp ?p_t ?o_t . 
+}
+" .

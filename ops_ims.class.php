@@ -4,18 +4,7 @@ define('REQUEST_URI_NO', 40);
 
 class OpsIms {
     var $IMS_variables = array(
-            '?chembl_target_uri'=>'http://rdf.ebi.ac.uk/resource/chembl/target/' ,
-            '?chembl_compound_uri'=>'http://rdf.ebi.ac.uk/resource/chembl/molecule/' ,
-            '?uniprot_target_uri'=>'http://purl.uniprot.org/uniprot/' ,
-            '?cw_target_uri'=>'http://www.conceptwiki.org/concept/' ,
-            '?cw_compound_uri'=>'http://www.conceptwiki.org/concept/' ,
-            '?ocrs_compound_uri'=>'http://ops.rsc.org/OPS' ,
-            '?db_compound_uri'=>'http://bio2rdf.org/drugbank',
-            '?db_target_uri'=>'http://bio2rdf.org/drugbank',
-            '?dg_gene_uri' => 'http://identifiers.org/ncbigene/',
-	    '?umls_disease_uri' => 'http://linkedlifedata.com/resource/umls/id/',
-	    '?node_uri' => 'http://rdf.ebi.ac.uk/resource/chembl/protclass/&targetUriPattern=http://purl.obolibrary.org/obo/CHEBI_&targetUriPattern=http://purl.uniprot.org/enzyme/&targetUriPattern=http://purl.obolibrary.org/obo/GO_',
-	    '?aers_compound_uri' => 'http://aers.data2semantics.org/resource/drug/'
+            '?dataset_uri'=>'http://rdf.risis.eu/dataset/' 
     );
     
     var $IMS_interm_variables = array(
@@ -64,7 +53,8 @@ class OpsIms {
            if (strpos($query, $variableName)!==false) {
                $variableInfoMap[$variableName] = array();
                $url = IMS_MAP_ENDPOINT;
-               $url .= '?rdfFormat=RDF/XML';
+	       $url .= '?Uri='.urlencode($input_uri);
+               $url .= '&rdfFormat=RDF/XML';
                $url .= "&targetUriPattern={$pattern}";
                $url .= '&overridePredicateURI=http://www.w3.org/2004/02/skos/core#exactMatch';
                $url .= '&lensUri=';
@@ -75,8 +65,8 @@ class OpsIms {
                   $url .= $lens;
                }
        
-              $url .= '&Uri='.urlencode($input_uri);
-	      //logDebug("IMS Request: ".$url);                   
+              $url .= '?Uri='.urlencode($input_uri);
+	      logDebug("IMS Request: ".$url);                   
               $variableInfoMap[$variableName]['url']=$url;
               $ch = curl_init();
               curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -143,7 +133,7 @@ class OpsIms {
    
    private function handleResponse($varInfo, $multiHandle, $input_uri, $variableName, &$variableInfoMap){
        $response = curl_multi_getcontent($varInfo['handle']);
-	//logDebug("IMS Response: {$response}");
+//	logDebug("IMS Response: {$response}");
        curl_close($varInfo['handle']);
        curl_multi_remove_handle($multiHandle, $varInfo['handle']);
        //echo $url;

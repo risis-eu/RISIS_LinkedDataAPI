@@ -1,0 +1,48 @@
+@base <http://api.risis.ops.few.vu.nl/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix api: <http://purl.org/linked-data/api/vocab#> .
+@prefix rel: <http://vocab.org/relationship/> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<#geodata> a api:API ;
+        rdfs:label "GeoData"@en ;
+        api:sparqlEndpoint <http://localhost:8890/sparql/> ;
+        api:contentNegotiation api:parameterBased ;
+#        api:variable <#code> ; 
+#	api:dataset <http://www.conceptwiki.org> ;
+#	api:vocabulary <http://semanticscience.org/resource/> ;
+	api:description "returns information on geo data" ;
+	api:endpoint [ 
+		a api:ItemEndpoint ;
+		api:name "NUTS to Name" ;
+		api:description "Names of a NUTS region in Europe.";
+		api:uriTemplate "/NUTStoName/{code}" ;
+	        api:itemTemplate "http://nuts.geovocab.org/id/{code}" ;
+		#api:variable <#code> ;
+		api:exampleRequestPath "/NUTStoName/NL326";
+		api:viewer <#NUTSViewer> ;
+		api:defaultViewer <#NUTSViewer> ] .
+
+#<http://www.conceptwiki.org> api:label "ConceptWiki" .
+
+#<http://semanticscience.org/resource/> api:label "sio" .
+
+<#NUTSViewer> a api:Viewer ;
+	api:name "NUTSViewer" ;
+	api:template 
+"
+?item rdfs:label ?name .
+";
+	api:where 
+"
+GRAPH <http://nuts.geovocab.org/> {
+?item a <http://rdfdata.eionet.europa.eu/ramon/ontology/NUTSRegion> .
+?item <http://rdfdata.eionet.europa.eu/ramon/ontology/name> ?name .
+}
+" .

@@ -1,0 +1,56 @@
+@base <http://api.risis.ops.few.vu.nl/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix api: <http://purl.org/linked-data/api/vocab#> .
+@prefix rel: <http://vocab.org/relationship/> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<#geodata> a api:API ;
+        rdfs:label "GeoData"@en ;
+        api:sparqlEndpoint <http://localhost:8890/sparql/> ;
+        api:contentNegotiation api:parameterBased ;
+        api:variable <http://rdfdata.eionet.europa.eu/ramon/ontology/name> ; 
+#	api:dataset <http://www.conceptwiki.org> ;
+#	api:vocabulary <http://semanticscience.org/resource/> ;
+	api:description "returns information on geo data" ;
+	api:endpoint [ 
+		a api:ItemEndpoint ;
+		api:name "Name to NUTS" ;
+		api:description "NUTS of a region name in Europe.";
+		api:uriTemplate "/NameToNUTS/{name}" ;
+	        api:itemTemplate "http://api.risis.ops.few.vu.nl/place/{name}" ;
+		api:exampleRequestPath "/NameToNUTS/Groot-Amsterdam";
+		api:viewer <#NameViewer> ;
+		api:defaultViewer <#NameViewer> ] .
+
+#<http://www.conceptwiki.org> api:label "ConceptWiki" .
+
+#<http://semanticscience.org/resource/> api:label "sio" .
+
+<http://rdfdata.eionet.europa.eu/ramon/ontology/name> api:name "name" ;
+	api:label "name" ;
+	api:value "The literal name of a NUTS region." ;
+	api:filterVariable "?s";
+	a rdf:Property .
+
+<#NameViewer> a api:Viewer ;
+	api:name "NameViewer" ;
+	api:template 
+"
+?name_uri skos:exactMatch ?s.
+?s <http://rdfdata.eionet.europa.eu/ramon/ontology/code> ?code.
+";
+	api:where 
+"
+GRAPH <http://nuts.geovocab.org/> {
+?s a <http://rdfdata.eionet.europa.eu/ramon/ontology/NUTSRegion> .
+?s <http://rdfdata.eionet.europa.eu/ramon/ontology/code> ?code .
+?s <http://rdfdata.eionet.europa.eu/ramon/ontology/name> ?name .
+BIND(IRI(CONCAT('http://api.risis.ops.few.vu.nl/place/', ENCODE_FOR_URI(?name))) AS ?name_uri)
+}
+" .

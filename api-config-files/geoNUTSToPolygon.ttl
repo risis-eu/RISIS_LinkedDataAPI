@@ -38,9 +38,11 @@
 	api:template 
 "
 ?item rdfs:label ?name .
-?item <http://d-nb.info/standards/elementset/gnd#coordinates> ?coordinates .
-?coordinates <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long ;
-    <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .
+?item rdf:type ?type .
+?item <http://www.w3.org/2003/01/geo/wgs84_pos#geometry> ?polygon .
+
+#?coordinates <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long ;
+#    <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .
 ";
 	api:where 
 "
@@ -48,9 +50,8 @@ GRAPH <http://nuts.geovocab.org/> {
 ?item a <http://rdfdata.eionet.europa.eu/ramon/ontology/NUTSRegion> .
 ?item <http://geovocab.org/geometry#geometry> ?g .
 ?item <http://rdfdata.eionet.europa.eu/ramon/ontology/name> ?name .
+?item <http://www.w3.org/2003/01/geo/wgs84_pos#geometry> ?polygon .
 ?g <http://geovocab.org/geometry#exterior> ?ex .
-?ex <http://geovocab.org/geometry#posList>/(rdf:rest*/rdf:first)* ?coordinates .
-?coordinates <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long .
-?coordinates <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .
+?ex rdf:type ?type .
 }
 " .

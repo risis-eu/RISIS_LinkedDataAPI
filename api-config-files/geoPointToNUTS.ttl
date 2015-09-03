@@ -66,7 +66,7 @@ GRAPH <http://nuts.geovocab.org/> {
 	ramon:code ?code ;
 	ramon:name ?name ;
 	geo:geometry ?polygon .
-FILTER (bif:st_intersects (?polygon, bif:st_point (xsd:double(?long), xsd:double(?lat))))
+FILTER (bif:st_intersects (bif:st_geomfromtext(STR(?polygon)), bif:st_point (xsd:double(?long), xsd:double(?lat))))
 }
 BIND(IRI(CONCAT('http://api.risis.ops.few.vu.nl/point?long=',?long,'&lat=',?lat)) AS ?point_uri)
 " .

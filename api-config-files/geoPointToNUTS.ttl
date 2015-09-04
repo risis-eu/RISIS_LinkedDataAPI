@@ -57,6 +57,7 @@ _:lat api:name "lat" ;
 ?point_uri risis-api:occursIn ?nuts .
 ?nuts a ramon:NUTSRegion ;
         ramon:code ?code ;
+	ramon:level ?level ;
         ramon:name ?name .
 ";
 	api:where 
@@ -64,6 +65,7 @@ _:lat api:name "lat" ;
 GRAPH <http://nuts.geovocab.org/> {
 ?nuts a ramon:NUTSRegion ;
 	ramon:code ?code ;
+        ramon:level ?level ;
 	ramon:name ?name ;
 	geo:geometry ?polygon .
 FILTER (bif:st_intersects (bif:st_geomfromtext(STR(?polygon)), bif:st_point (xsd:double(?long), xsd:double(?lat))))

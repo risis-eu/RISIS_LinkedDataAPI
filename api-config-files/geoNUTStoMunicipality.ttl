@@ -1,0 +1,73 @@
+@base <http://api.risis.ops.few.vu.nl/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix api: <http://purl.org/linked-data/api/vocab#> .
+@prefix gc: <http://puelia-php.googlecode.com/svn/trunk/documents/config.ttl#> .
+@prefix rel: <http://vocab.org/relationship/> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix  geometry: <http://geovocab.org/geometry#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix  igeo: <http://rdf.insee.fr/def/geo#> .
+@prefix risisMCP: <http://risis.eu/municipalities/vocab/> .
+<#geodata> a api:API ;
+        rdfs:label "GeoData"@en ;
+        api:sparqlEndpoint <http://localhost:8890/sparql/> ;
+	api:contentNegotiation api:parameterBased ;
+	api:description "returns information on geo data" ;
+	api:variable _:codeURI ;
+	api:endpoint <#mcpListEndpoint> .
+
+<#mcpListEndpoint> a api:ListEndpoint ;
+	api:uriTemplate "/NUTStoMunicipality/{ncode}" ;
+	#api:itemTemplate "http://nuts.geovocab.org/id/{ncode}" ;
+	api:name "NUTS to Municipality" ;
+	api:description "A paginated list of municipalities within a NUTS region" ;	
+	api:exampleRequestPath "/NUTStoMunicipality/NL326" ;
+	api:defaultPageSize "10";	
+	api:selector [
+                api:where
+"
+GRAPH <http://risis.eu/municipalities> {
+	?item a risisMCP:Municipality .
+	?item igeo:NUTS3 ?codeURI .
+}
+" ;
+       ] ;
+	api:defaultViewer <#mcpListViewer> .
+
+_:base api:name "base" ;
+	api:value "http://nuts.geovocab.org/id" .
+
+_:codeURI api:name "codeURI" ;
+	api:label "codeURI" ;
+        api:filterVariable "?codeURI" ;
+        api:value "http://nuts.geovocab.org/id/{ncode}" ;
+	rdfs:subPropertyOf api:graphFilter ;
+        a rdfs:Resource .
+
+<#mcpListViewer> a api:Viewer ;
+        api:name "mcpListViewer" ;
+	api:template 
+"
+        ?item dcterms:title ?name ;
+              risisMCP:isCore ?isCore ;
+	      risisMCP:municipalityID ?mID ;
+              risisMCP:functionalUrbanArea ?fua .
+" ;
+	api:where 
+"
+GRAPH <http://risis.eu/municipalities> {
+#	?item a risisMCP:Municipality .
+	?item dcterms:title ?name .
+	?item risisMCP:isCore ?isCore .
+	?item risisMCP:municipalityID ?mID .
+	?item risisMCP:functionalUrbanArea ?fua .
+	?fua dcterms:title ?fuaName .
+	?item igeo:NUTS3 ?codeURI .
+}
+"

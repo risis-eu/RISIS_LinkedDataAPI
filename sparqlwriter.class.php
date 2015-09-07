@@ -463,10 +463,10 @@ _SPARQL_;
     	$params = $this->_request->getParams();
     	$vars = $this->_config->getApiConfigVariableBindings();
     	$ep_vars = $this->_config->getEndpointConfigVariableBindings();
+	$all_vars = $this->_config->getAllProcessedVariableBindings();
     	$filterGraph = array();
-    	
     	$count=1;//TODO ??
-    	foreach ($params as $param_name => $param_value) {
+	foreach ($params as $param_name => $param_value) {
     		if ($param_name != 'uri' && $param_name != 'uri_list'){
     			foreach ($vars as $var_name => $var_props) {
     				if ($param_name==$var_name AND $param_value !=""){
@@ -499,7 +499,18 @@ _SPARQL_;
     				}
     			}
     		}
-    	}
+	}
+	foreach ($all_vars as $var_name => $var_props) {
+		if (isset($var_props["sparqlVar"])) {
+			$filterPredicate = $this->findSuperProperty($var_props['uri']);
+			if ($filterPredicate === API.'graphFilter') {
+				$this->getFilterGraphForGraphValue($var_props["value"], $var_props, $ep_vars, $filterGraph);
+			}
+			else {
+				$this->getFilterGraphForParamValue($var_props["value"], $filterPredicate, $var_props, $ep_vars, $filterGraph);	
+			}
+		}
+	}
     	if (!empty($filterGraph)){
     		return $filterGraph;
     	}
@@ -511,7 +522,12 @@ _SPARQL_;
             	$filterGraph[$var_props['sparqlVar']] .= "VALUES {$var_props['sparqlVar']} { <{$ep_vars[$param_value]['uri']}> }";
 	    }
 	    else {
-		$filterGraph[$var_props['sparqlVar']] .= "VALUES {$var_props['sparqlVar']} { '{$param_value}' }";
+                if (filter_var($param_value, FILTER_VALIDATE_URL) === FALSE) {
+		  $filterGraph[$var_props['sparqlVar']] .= "VALUES {$var_props['sparqlVar']} { '{$param_value}' }";
+		}
+		else {
+		  $filterGraph[$var_props['sparqlVar']] .= "VALUES {$var_props['sparqlVar']} { <{$param_value}> }";
+		}
 	    }
         }
         else {
@@ -519,7 +535,12 @@ _SPARQL_;
             	$filterGraph[$var_props['sparqlVar']] = "VALUES {$var_props['sparqlVar']} { <{$ep_vars[$param_value]['uri']}> }";
 	    }
             else {
-                $filterGraph[$var_props['sparqlVar']] = "VALUES {$var_props['sparqlVar']} { '{$param_value}' }";
+		if (filter_var($param_value, FILTER_VALIDATE_URL) === FALSE) {
+                  $filterGraph[$var_props['sparqlVar']] = "VALUES {$var_props['sparqlVar']} { '{$param_value}' }";
+		}
+		else {
+		  $filterGraph[$var_props['sparqlVar']] = "VALUES {$var_props['sparqlVar']} { <{$param_value}> }";
+		}
             }
         }
     }

@@ -28,7 +28,7 @@
 	api:name "NUTS to Municipality" ;
 	api:description "A paginated list of municipalities within a NUTS region" ;	
 	api:exampleRequestPath "/NUTStoMunicipality/NL326" ;
-	api:defaultPageSize "10";	
+	api:defaultPageSize "15";	
 	api:selector [
                 api:where
 "
@@ -58,6 +58,8 @@ _:codeURI api:name "codeURI" ;
               risisMCP:isCore ?isCore ;
 	      risisMCP:municipalityID ?mID ;
               risisMCP:functionalUrbanArea ?fua .
+	?fua dcterms:title ?fuaName .
+	?fua risisMCP:code ?fuaCode .
 " ;
 	api:where 
 "
@@ -68,6 +70,7 @@ GRAPH <http://risis.eu/municipalities> {
 	?item risisMCP:municipalityID ?mID .
 	?item risisMCP:functionalUrbanArea ?fua .
 	?fua dcterms:title ?fuaName .
+	?fua risisMCP:code ?fuaCode .
 	?item igeo:NUTS3 ?codeURI .
 }
 "

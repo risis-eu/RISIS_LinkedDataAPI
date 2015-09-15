@@ -1,0 +1,73 @@
+@base <http://api.risis.ops.few.vu.nl/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix api: <http://purl.org/linked-data/api/vocab#> .
+@prefix rel: <http://vocab.org/relationship/> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix ramon: <http://rdfdata.eionet.europa.eu/ramon/ontology/> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix risis-api: <http://api.risis.ops.few.vu.nl/> .
+@prefix risisV: <http://geo.risis.eu/vocabulary/> .
+
+<#geodata> a api:API ;
+        rdfs:label "GeoData"@en ;
+        api:sparqlEndpoint <http://localhost:8890/sparql/> ;
+        api:contentNegotiation api:parameterBased ;
+        api:variable _:long ;
+	api:variable _:lat ; 
+#	api:dataset <http://www.conceptwiki.org> ;
+#	api:vocabulary <http://semanticscience.org/resource/> ;
+	api:description "returns information on geo data" ;
+	api:endpoint [ 
+		a api:ItemEndpoint ;
+		api:name "Point to Municipality" ;
+		api:description "Municipality of a Geo-point (long/lat) in Europe.";
+		api:uriTemplate "/PointToMunicipality?long={long}&lat={lat}" ;
+	        api:itemTemplate "http://api.risis.ops.few.vu.nl/point?long={long}&lat={lat}" ;
+		api:exampleRequestPath "/PointToMunicipality?long=4.865720&lat=52.333757";
+		api:viewer <#PointViewer2> ;
+		api:defaultViewer <#PointViewer2> ] .
+
+#<http://www.conceptwiki.org> api:label "ConceptWiki" .
+
+#<http://semanticscience.org/resource/> api:label "sio" .
+
+_:long api:name "long" ;
+	api:label "long" ;
+	api:value "The longitude of the point" ;
+	api:filterVariable "?long";
+	rdfs:subPropertyOf api:graphFilter ;
+	a rdf:Property .
+
+_:lat api:name "lat" ;
+        api:label "lat" ;
+        api:value "The latitude of the point" ;
+        api:filterVariable "?lat";
+        rdfs:subPropertyOf api:graphFilter ;
+        a rdf:Property .
+
+<#PointViewer2> a api:Viewer ;
+	api:name "PointViewer" ;
+	api:template 
+"
+?point_uri risis-api:occursIn ?mcp .
+?mcp a risisV:Municipality ;
+        risisV:municipalityID ?code ;
+        dcterms:title ?name .
+";
+	api:where 
+"
+GRAPH <http://geo.risis.eu> {
+?mcp a risisV:Municipality ;
+	risisV:municipalityID ?code ;
+	dcterms:title ?name ;
+	geo:geometry ?polygon .
+FILTER (bif:st_intersects (bif:st_geomfromtext(STR(?polygon)), bif:st_point (xsd:double(?long), xsd:double(?lat))))
+}
+BIND(IRI(CONCAT('http://api.risis.ops.few.vu.nl/point?long=',?long,'&lat=',?lat)) AS ?point_uri)
+" .

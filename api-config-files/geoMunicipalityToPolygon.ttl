@@ -1,0 +1,57 @@
+@base <http://api.risis.ops.few.vu.nl/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix api: <http://purl.org/linked-data/api/vocab#> .
+@prefix rel: <http://vocab.org/relationship/> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix geoV: <http://geo.risis.eu/vocabulary/> .
+@prefix geoM: <http://geo.risis.eu/municipality/> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+
+<#geodata> a api:API ;
+        rdfs:label "GeoData"@en ;
+        api:sparqlEndpoint <http://localhost:8890/sparql/> ;
+        api:contentNegotiation api:parameterBased ;
+#        api:variable <#code> ; 
+#	api:dataset <http://www.conceptwiki.org> ;
+#	api:vocabulary <http://semanticscience.org/resource/> ;
+	api:description "returns information on geo data" ;
+	api:endpoint [ 
+		a api:ItemEndpoint ;
+		api:name "Municipality to Polygon" ;
+		api:description "Returns the boundary of a municipality as a polygon.";
+		api:uriTemplate "/MunicipalityToPolygon/{mcode}" ;
+	        api:itemTemplate "http://geo.risis.eu/municipality/{mcode}" ;
+		#api:variable <#mcode> ;
+		api:exampleRequestPath "/MunicipalityToPolygon/NL270363";
+		api:viewer <#PolygonViewer2> ;
+		api:defaultViewer <#PolygonViewer2> ] .
+
+#<http://www.conceptwiki.org> api:label "ConceptWiki" .
+
+#<http://semanticscience.org/resource/> api:label "sio" .
+
+<#PolygonViewer2> a api:Viewer ;
+	api:name "polygonViewer2" ;
+	api:template 
+"
+?item rdfs:label ?name .
+?item geo:geometry ?polygon .
+?item geoV:osmID ?osmID .
+#?coordinates <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long ;
+#    <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .
+";
+	api:where 
+"
+GRAPH <http://geo.risis.eu> {
+?item a geoV:Municipality .
+?item dcterms:title ?name .
+?item geo:geometry ?polygon .
+?item geoV:osmID ?osmID .
+}
+" .

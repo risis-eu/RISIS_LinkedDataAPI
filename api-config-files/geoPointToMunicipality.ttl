@@ -13,6 +13,7 @@
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 @prefix risis-api: <http://api.risis.ops.few.vu.nl/> .
 @prefix risisV: <http://geo.risis.eu/vocabulary/> .
+@prefix edm: <http://www.europeana.eu/schemas/edm/> .
 
 <#geodata> a api:API ;
         rdfs:label "GeoData"@en ;
@@ -58,6 +59,7 @@ _:lat api:name "lat" ;
 ?point_uri risis-api:occursIn ?mcp .
 ?mcp a risisV:Municipality ;
         risisV:municipalityID ?code ;
+	edm:country ?country ;
         dcterms:title ?name .
 ";
 	api:where 
@@ -66,6 +68,7 @@ GRAPH <http://geo.risis.eu> {
 ?mcp a risisV:Municipality ;
 	risisV:municipalityID ?code ;
 	dcterms:title ?name ;
+	edm:country ?country ;
 	geo:geometry ?polygon .
 FILTER (bif:st_intersects (bif:st_geomfromtext(STR(?polygon)), bif:st_point (xsd:double(?long), xsd:double(?lat))))
 }

@@ -42,7 +42,7 @@ GRAPH <http://geo.risis.eu> {
 	api:defaultViewer <#mcpListViewer2> .
 
 _:countryName api:name "countryName" ;
-	api:label "codeName" ;
+	api:label "countryName" ;
         api:filterVariable "?countryName" ;
         api:value "{countryName}" ;
 	rdfs:subPropertyOf api:graphFilter ;

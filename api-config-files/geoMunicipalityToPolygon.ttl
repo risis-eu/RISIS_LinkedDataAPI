@@ -12,6 +12,7 @@
 @prefix geoV: <http://geo.risis.eu/vocabulary/> .
 @prefix geoM: <http://geo.risis.eu/municipality/> .
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix geoname: <http://www.geonames.org/ontology#> .
 
 <#geodata> a api:API ;
         rdfs:label "GeoData"@en ;
@@ -43,6 +44,13 @@
 ?item rdfs:label ?name .
 ?item geo:geometry ?polygon .
 ?item geoV:osmID ?osmID .
+?item geoV:isCore ?isCore .
+?item geoV:functionalUrbanArea ?fua .
+?fua dcterms:title ?fuaName ;
+     geoV:fuaID ?fuaID ;
+     geoV:fuaType ?fuaType ;
+     geoname:population ?poulation .
+
 #?coordinates <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long ;
 #    <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat .
 ";
@@ -52,6 +60,12 @@ GRAPH <http://geo.risis.eu> {
 ?item a geoV:Municipality .
 ?item dcterms:title ?name .
 ?item geo:geometry ?polygon .
+?item geoV:isCore ?isCore .
 ?item geoV:osmID ?osmID .
+?item geoV:functionalUrbanArea ?fua .
+?fua dcterms:title ?fuaName ;
+     geoV:fuaID ?fuaID ;
+     geoV:fuaType ?fuaType ;
+     geoname:population ?poulation .
 }
 " .

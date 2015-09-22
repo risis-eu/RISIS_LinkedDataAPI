@@ -21,7 +21,7 @@
         api:sparqlEndpoint <http://localhost:8890/sparql/> ;
 	api:contentNegotiation api:parameterBased ;
 	api:description "returns information on geo data" ;
-	api:variable _:countryName ;
+	api:variable edm:country ;
 	api:endpoint <#mcpListEndpoint2> .
 
 <#mcpListEndpoint2> a api:ListEndpoint ;
@@ -41,12 +41,12 @@ GRAPH <http://geo.risis.eu> {
        ] ;
 	api:defaultViewer <#mcpListViewer2> .
 
-_:countryName api:name "countryName" ;
+edm:country api:name "countryName" ;
 	api:label "countryName" ;
-        api:filterVariable "?countryName" ;
+        api:filterVariable "?item" ;
         api:value "{countryName}" ;
-	rdfs:subPropertyOf api:graphFilter ;
-        a rdfs:Resource .
+#	rdfs:subPropertyOf api:graphFilter ;
+        a rdf:Property .
 
 <#mcpListViewer2> a api:Viewer ;
         api:name "mcpListViewer" ;

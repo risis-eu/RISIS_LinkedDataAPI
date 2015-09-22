@@ -501,6 +501,12 @@ _SPARQL_;
     		}
 	}
 	foreach ($all_vars as $var_name => $var_props) {
+		if (!isset($var_props["sparqlVar"]) && isset($vars[$var_name]["sparqlVar"])) {
+			$var_props["sparqlVar"] = $vars[$var_name]["sparqlVar"];
+		}
+		if (!isset($var_props["uri"]) && isset($vars[$var_name]["uri"])) {
+                        $var_props["uri"] = $vars[$var_name]["uri"];
+                }
 		if (isset($var_props["sparqlVar"])) {
 			$filterPredicate = $this->findSuperProperty($var_props['uri']);
 			if ($filterPredicate === API.'graphFilter') {

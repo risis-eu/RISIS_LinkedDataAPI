@@ -64,7 +64,7 @@ _:lat api:name "lat" ;
 ";
 	api:where 
 "
-GRAPH <http://geo.risis.eu> {
+GRAPH <http://geo.risis.eu/shapefiles> {
 ?mcp a risisV:Municipality ;
 	risisV:municipalityID ?code ;
 	dcterms:title ?name ;

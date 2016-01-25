@@ -33,7 +33,7 @@
 	api:selector [
                 api:where
 "
-GRAPH <http://geo.risis.eu> {
+GRAPH <http://geo.risis.eu/municipalities> {
 	?item a risisV:Municipality .
 	?item edm:country ?countryName .
 }
@@ -57,7 +57,7 @@ edm:country api:name "countryName" ;
 " ;
 	api:where 
 "
-GRAPH <http://geo.risis.eu> {
+GRAPH <http://geo.risis.eu/municipalities> {
 #	?item a risisV:Municipality .
 	?item dcterms:title ?name .
 	?item risisV:municipalityID ?municipalityID .

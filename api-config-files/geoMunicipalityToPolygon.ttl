@@ -56,13 +56,16 @@
 ";
 	api:where 
 "
-GRAPH <http://geo.risis.eu> {
+GRAPH <http://geo.risis.eu/shapefiles> {
+?item geo:geometry ?polygon .
+?item geoV:osmID ?osmID .
+}
+GRAPH <http://geo.risis.eu/municipalities> {
 ?item a geoV:Municipality .
 ?item dcterms:title ?name .
-?item geo:geometry ?polygon .
 ?item geoV:isCore ?isCore .
-?item geoV:osmID ?osmID .
 ?item geoV:functionalUrbanArea ?fua .
+
 ?fua dcterms:title ?fuaName ;
      geoV:fuaID ?fuaID ;
      geoV:fuaType ?fuaType ;
